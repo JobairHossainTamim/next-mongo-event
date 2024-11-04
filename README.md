@@ -8,3 +8,4 @@
 - Day Js
 - @clerk/next
 - react-hot-toast
+- remix

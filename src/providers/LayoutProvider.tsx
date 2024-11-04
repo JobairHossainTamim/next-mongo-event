@@ -82,7 +82,7 @@ const LayoutProvider = ({
           </div>
         </div>
       )}
-      <div className="p-0">{children}</div>
+      <div className="py-3">{children}</div>
     </div>
   );
 };
