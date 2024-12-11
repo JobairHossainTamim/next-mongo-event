@@ -31,8 +31,12 @@ const Steps = ({ stepNames, stepContent, activeStep }: StepsProps) => {
                   {index + 1}
                 </div>
 
-                {activeStep >= index && activeStep !== stepName.length - 1 && (
-                  <div className="h-2 w-full bg-black"></div>
+                {activeStep > index && activeStep !== stepName.length - 1 && (
+                  <div className="h-1 w-full bg-black"></div>
+                )}
+
+                {activeStep <= index && index !== stepName.length - 1 && (
+                  <div className="h-1 w-full bg-black"></div>
                 )}
               </div>
               <h1 className="text-sm">{stepName}</h1>
@@ -40,6 +44,9 @@ const Steps = ({ stepNames, stepContent, activeStep }: StepsProps) => {
           );
         })}
       </div>
+
+      {/*  */}
+      <div className="mt-5">{stepContent[activeStep]}</div>
     </div>
   );
 };

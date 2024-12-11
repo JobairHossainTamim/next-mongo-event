@@ -8,14 +8,34 @@ import Tickets from "./Tickets";
 import { useState } from "react";
 
 const EventForm = () => {
-  const [activeStep = 0, setActiveStep] = useState(0);
+  const [activeStep = 0, setActiveStep] = useState<number>(0);
+  const [event, setEvent] = useState<any>(null);
+
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+  };
+
+  const commonProps = {
+    event,
+    setEvent,
+    activeStep,
+    setActiveStep,
+  };
+
   return (
     <div>
-      <Steps
-        stepNames={["General", "Location & Date", "Media", "Tickets"]}
-        stepContent={[<General />, <LocationAndDate />, <Media />, <Tickets />]}
-        activeStep={activeStep}
-      ></Steps>
+      <form onSubmit={onSubmit}>
+        <Steps
+          stepNames={["General", "Location & Date", "Media", "Tickets"]}
+          stepContent={[
+            <General {...commonProps} />,
+            <LocationAndDate {...commonProps} />,
+            <Media {...commonProps} />,
+            <Tickets {...commonProps} />,
+          ]}
+          activeStep={activeStep}
+        ></Steps>
+      </form>
     </div>
   );
 };
