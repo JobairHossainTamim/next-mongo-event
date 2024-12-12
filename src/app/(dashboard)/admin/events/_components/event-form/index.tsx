@@ -1,5 +1,4 @@
 "use client";
-
 import Steps from "@/components/Steps";
 import General from "./General";
 import LocationAndDate from "./LocationAndDate";
@@ -10,6 +9,10 @@ import { useState } from "react";
 const EventForm = () => {
   const [activeStep = 0, setActiveStep] = useState<number>(0);
   const [event, setEvent] = useState<any>(null);
+  // images
+  const [newlySelectedImages = [], setNewlySelectedImages] = useState<any[]>(
+    []
+  );
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -20,6 +23,10 @@ const EventForm = () => {
     setEvent,
     activeStep,
     setActiveStep,
+
+    // images
+    newlySelectedImages,
+    setNewlySelectedImages,
   };
 
   return (
