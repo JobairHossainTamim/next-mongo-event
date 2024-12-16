@@ -5,6 +5,8 @@ import LocationAndDate from "./LocationAndDate";
 import Media from "./Media";
 import Tickets from "./Tickets";
 import { useState } from "react";
+import { uploadToFirebaseUrl } from "@/helper/image-upload";
+import toast from "react-hot-toast";
 
 const EventForm = () => {
   const [activeStep = 0, setActiveStep] = useState<number>(0);
@@ -14,8 +16,16 @@ const EventForm = () => {
     []
   );
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
+  const onSubmit = async (e: any) => {
+    try {
+      e.preventDefault();
+      event.images = await uploadToFirebaseUrl(
+        newlySelectedImages.map((image: any) => image.file)
+      );
+      console.log(event);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const commonProps = {

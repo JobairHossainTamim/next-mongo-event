@@ -5,6 +5,8 @@ import { Button } from "@nextui-org/react";
 const Media = ({
   newlySelectedImages = [],
   setNewlySelectedImages,
+  activeStep,
+  setActiveStep,
 }: EventFormStepProps) => {
   const uploadFilesRef = useRef<HTMLInputElement>(null);
 
@@ -76,6 +78,25 @@ const Media = ({
             </h1>
           </div>
         ))}
+      </div>
+
+      {/* step */}
+      <div className="flex justify-center gap-5">
+        <Button
+          onClick={() => {
+            setActiveStep(activeStep - 1);
+          }}
+        >
+          Previous
+        </Button>
+        <Button
+          color="primary"
+          onClick={() => {
+            setActiveStep(activeStep + 1);
+          }}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
