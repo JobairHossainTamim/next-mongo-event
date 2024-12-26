@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const Tickets = ({
   event,
   setEvent,
+  loading,
   activeStep,
   setActiveStep,
 }: EventFormStepProps) => {
@@ -90,7 +91,7 @@ const Tickets = ({
               onTicketPropertyChange({
                 index,
                 property: "price",
-                value: e.target.value,
+                value: Number(e.target.value),
               });
             }}
           />
@@ -101,7 +102,7 @@ const Tickets = ({
               onTicketPropertyChange({
                 index,
                 property: "limit",
-                value: e.target.value,
+                value: Number(e.target.value),
               });
             }}
           />
@@ -126,8 +127,9 @@ const Tickets = ({
           color="primary"
           type="submit"
           isDisabled={event?.ticketTypes?.length === 0}
+          isLoading={loading}
         >
-          Submit
+          Save
         </Button>
       </div>
     </div>

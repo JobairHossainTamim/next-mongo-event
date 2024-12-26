@@ -1,19 +1,29 @@
-import firebaseApp from "@/config/firebaseConfig";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-
-export const uploadToFirebaseUrl = async (files: any[]) => {
+export const uploadToCloudinaryAPI = async (
+  files: File[]
+): Promise<string[]> => {
   try {
-    const storage = getStorage(firebaseApp);
-    const urls = [];
+    const urls: string[] = [];
 
     for (const file of files) {
-      const storageRef = ref(storage, `images/${file.name}`);
-      const snapShot = await uploadBytes(storageRef, file);
-      const downloadUrl = await getDownloadURL(snapShot.ref);
-      urls.push(downloadUrl);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Call the API route
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${await response.text()}`);
+      }
+
+      const { url } = await response.json();
+      urls.push(url);
     }
+
     return urls;
   } catch (error: any) {
-    throw new Error(error.message);
+    throw new Error(`Error uploading to Cloudinary: ${error.message}`);
   }
 };

@@ -9,6 +9,7 @@ export interface EventFormStepProps {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   newlySelectedImages: any[];
   setNewlySelectedImages?: React.Dispatch<React.SetStateAction<any[]>>;
+  loading: boolean;
 }
 
 const General = ({
@@ -19,14 +20,14 @@ const General = ({
 }: EventFormStepProps) => {
   const [guest, setGuest] = useState<string>("");
 
-  const getCommonProps = (name: string) => {
-    return {
-      value: event?.[name],
-      onchange: (e: any) => setEvent({ ...event, [name]: e.target.value }),
+  // Helper for shared props
+  const getCommonProps = (name: string) =>
+    ({
+      value: event?.[name] || "", // Fallback to an empty string
+      onChange: (e: any) => setEvent({ ...event, [name]: e.target.value }),
       labelPlacement: "outside",
       isRequired: true,
-    } as any;
-  };
+    } as any);
 
   const onGuestAdd = () => {
     const newGuests = guest
@@ -55,11 +56,6 @@ const General = ({
         placeholder="Event Name"
         {...getCommonProps("name")}
       />
-      <Input
-        label="Organizer"
-        placeholder="Enter Organizer Name"
-        {...getCommonProps("organizer")}
-      />
 
       <Textarea
         label="Description"
@@ -69,7 +65,7 @@ const General = ({
 
       <div className="flex gap-5 items-end">
         <Input
-          label="Organizer"
+          label="Guest"
           placeholder="Enter Organizer Name"
           value={guest}
           labelPlacement="outside"

@@ -5,12 +5,17 @@ import LocationAndDate from "./LocationAndDate";
 import Media from "./Media";
 import Tickets from "./Tickets";
 import { useState } from "react";
-import { uploadToFirebaseUrl } from "@/helper/image-upload";
 import toast from "react-hot-toast";
+import { uploadToCloudinaryAPI } from "@/helper/image-upload";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const EventForm = () => {
   const [activeStep = 0, setActiveStep] = useState<number>(0);
   const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+
   // images
   const [newlySelectedImages = [], setNewlySelectedImages] = useState<any[]>(
     []
@@ -19,12 +24,18 @@ const EventForm = () => {
   const onSubmit = async (e: any) => {
     try {
       e.preventDefault();
-      event.images = await uploadToFirebaseUrl(
+      event.images = await uploadToCloudinaryAPI(
         newlySelectedImages.map((image: any) => image.file)
       );
-      console.log(event);
+
+      await axios.post("/api/admin/event", event);
+      toast.success("Event Create Successful");
+      router.refresh();
+      setLoading(false);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      setLoading(true);
     }
   };
 
@@ -33,14 +44,14 @@ const EventForm = () => {
     setEvent,
     activeStep,
     setActiveStep,
-
+    loading,
     // images
     newlySelectedImages,
     setNewlySelectedImages,
   };
 
   return (
-    <div>
+    <div className="h-screen w-full">
       <form onSubmit={onSubmit}>
         <Steps
           stepNames={["General", "Location & Date", "Media", "Tickets"]}
