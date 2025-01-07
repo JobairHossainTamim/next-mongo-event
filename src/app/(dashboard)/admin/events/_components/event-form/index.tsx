@@ -4,13 +4,18 @@ import General from "./General";
 import LocationAndDate from "./LocationAndDate";
 import Media from "./Media";
 import Tickets from "./Tickets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { uploadToCloudinaryAPI } from "@/helper/image-upload";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { IEvent } from "@/interfaces/event";
 
-const EventForm = () => {
+interface Props {
+  initialData?: any;
+  type?: "edit" | "create";
+}
+const EventForm = ({ initialData, type = "create" }: Props) => {
   const [activeStep = 0, setActiveStep] = useState<number>(0);
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,9 +26,16 @@ const EventForm = () => {
     []
   );
 
+  useEffect(() => {
+    if (initialData) {
+      setEvent(initialData);
+    }
+  }, [initialData]);
+
   const onSubmit = async (e: any) => {
     try {
       e.preventDefault();
+
       event.images = await uploadToCloudinaryAPI(
         newlySelectedImages.map((image: any) => image.file)
       );
@@ -34,6 +46,7 @@ const EventForm = () => {
       setLoading(false);
     } catch (error: any) {
       toast.error(error.message);
+      setLoading(false);
     } finally {
       setLoading(true);
     }
